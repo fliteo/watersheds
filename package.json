@@ -5,6 +5,7 @@
     "test": "mocha test -R spec --recursive"
   },
   "devDependencies": {
+    "unit": "*",
     "chai": "*",
     "mocha": "*",
     "stringbuilder": "*"

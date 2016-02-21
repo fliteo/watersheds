@@ -1,6 +1,6 @@
 "use strict";
 
-var test = require('unit.js');
+var test = require('unit');
 var expect = require('chai').expect;
 
 describe('Test on the case examples from https://code.google.com/codejam/contest/90101/dashboard#s=p1', function(){
