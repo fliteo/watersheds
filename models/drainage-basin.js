@@ -10,7 +10,7 @@ var DrainageBasin = function (name){
 
 
 
-}
+};
 
 /**
  * Add a cell to the basin cell list and update the cell
@@ -19,7 +19,7 @@ var DrainageBasin = function (name){
 DrainageBasin.prototype.addCell = function(cell){
     this.cells.push(cell);
     cell.basin = this;
-}
+};
 
 /**
  * Update basin name
@@ -27,6 +27,6 @@ DrainageBasin.prototype.addCell = function(cell){
  */
 DrainageBasin.prototype.setName = function(name){
     this.name = name;
-}
+};
 
 module.exports = DrainageBasin;

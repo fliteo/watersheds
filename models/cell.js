@@ -11,7 +11,7 @@ var Cell = function(x, y, altitude){
     this.altitude = altitude;
     this.basin = null;
 
-}
+};
 
 /**
  * Update basin
@@ -19,7 +19,7 @@ var Cell = function(x, y, altitude){
  */
 Cell.prototype.setBasin = function(basin){
     this.basin = basin;
-}
+};
 
 
 module.exports = Cell;
