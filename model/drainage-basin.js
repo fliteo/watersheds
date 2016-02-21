@@ -1,4 +1,8 @@
-
+/**
+ * Represent a drainage basin with a name and an array of cells
+ * @param name
+ * @constructor
+ */
 var DrainageBasin = function (name){
 
     this.name = name;
@@ -8,9 +12,21 @@ var DrainageBasin = function (name){
 
 }
 
+/**
+ * Add a cell to the basin cell list and update the cell
+ * @param cell
+ */
 DrainageBasin.prototype.addCell = function(cell){
     this.cells.push(cell);
-    cell.bassin = this;
+    cell.basin = this;
+}
+
+/**
+ * Update basin name
+ * @param name
+ */
+DrainageBasin.prototype.setName = function(name){
+    this.name = name;
 }
 
 module.exports = DrainageBasin;

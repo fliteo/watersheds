@@ -1,4 +1,11 @@
 {
-  "name": "application-name",
-  "version": "0.0.1"
+  "name": "watersheds",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "mocha test -R spec --recursive"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*"
+  }
 }
