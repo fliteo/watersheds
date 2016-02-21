@@ -5,14 +5,6 @@ var DrainageBasin = require('./model/drainage-basin.js');
 
 var exports = module.exports = {};
 
-/*---------------------------------
-
-Launch calculation for a given map.
-@param map The map must be a 2 dimensions matrix (as array)
-The result is a 2 dimensions matrix with
-
------------------------------------*/
-
 
 /**
  * Launch calculation for a given map
@@ -21,23 +13,15 @@ The result is a 2 dimensions matrix with
  */
 exports.runMap = function runMap(map){
 
-    var height = map.length;
-    var width = map[0].length;
-
     var cellMap = createCellMap(map);
 
     calculateDrainageBasin(cellMap);
 
+    var res = createResultFromCellMap(cellMap);
 
-    var res = [];
-
-    for(let i = 0; i < cellMap.length; i++){
-        res[i] = [];
-        for(let j = 0; j < cellMap[i].length; j++)
-        res[i][j] = cellMap[i][j].basin.name;
-    }
     return res;
 };
+
 
 /**
  * Create a map of cells from a map of altitude
@@ -58,23 +42,52 @@ function createCellMap(map){
 }
 
 /**
- * Calculate the drainage basins. The result is included directly in the cellMap param in "basin" property of cells.
+ * Format the expected result from cellMap
+ * @param cellMap 2 dimensions array of cells
+ * @returns {Array} 2 dimensions array of drainage basins
+ */
+function createResultFromCellMap(cellMap){
+
+    var res = [];
+
+    for(let i = 0; i < cellMap.length; i++){
+        res[i] = [];
+        for(let j = 0; j < cellMap[i].length; j++)
+            res[i][j] = cellMap[i][j].basin.name;
+    }
+    return res;
+}
+
+/**
+ * Calculate the drainage basins.
+ * The result is included directly in the cellMap param in "basin" property of cells to help debug.
  * @param cellMap Map of cells with all "basin" property of cells to null
  */
 function calculateDrainageBasin(cellMap){
 
+    /**
+     * Character to name basins
+     * @type {number}
+     */
+    var charIndex = 97;
+
+    /**
+     * Array of existing basins
+     * @type {Array}
+     */
     var basins = [];
 
-    var charIndex = 97;
-    var seaks = [];
+
+    // Calculate drainage basin relation map between cells
     for(let i = 0; i < cellMap.length; i++){
         for(let j = 0; j < cellMap[i].length; j++){
 
+            // Actual cell
             let cell = cellMap[i][j];
 
             let lowerNeighboringCell = findLowerNeighboringCell(cell, cellMap);
 
-            // the cell has no neighboring cells
+            // the cell has no neighboring cells (usually in 1 / 1 map)
             if(lowerNeighboringCell == null){
                 let basin = new DrainageBasin(String.fromCharCode(charIndex++));
                 basin.addCell(cell);
@@ -113,50 +126,41 @@ function calculateDrainageBasin(cellMap){
 
             }
             // the cell is a sink, we just add it to a new basin if it doesn't have one
-            else {
-                seaks.push(cell);
-                if(cell.basin == null){
-                    let basin = new DrainageBasin(String.fromCharCode(charIndex++));
-                    basin.addCell(cell);
-
-                }
+            else if(cell.basin == null){
+                let basin = new DrainageBasin(String.fromCharCode(charIndex++));
+                basin.addCell(cell);
             }
 
 
         }
     }
 
-    // reset basins name
+    // Update bassins name to match expected result.
+    // See test case 6 of watersheds-test that show logic naming
+
+    //Begin naming to 'a'
     charIndex = 97;
 
     for(let i = 0; i < cellMap.length; i++) {
         for (let j = 0; j < cellMap[i].length; j++) {
 
-            let seakCell = cellMap[i][j];
-            if(!basins.contains(seakCell.basin)){
-                seakCell.basin.setName(String.fromCharCode(charIndex++));
-                basins.push(seakCell.basin);
+            let c = cellMap[i][j];
+            if(!basins.contains(c.basin)){
+                c.basin.setName(String.fromCharCode(charIndex++));
+                basins.push(c.basin);
             }
         }
     }
 }
 
-Array.prototype.contains = function(obj) {
-    var i = this.length;
-    while (i--) {
-        if (this[i] === obj) {
-            return true;
-        }
-    }
-    return false;
-}
+
 
 /**
  * Find the neighboring cell with lower altitude.
  * In case of a tie the priority is North, West, East, South
  * @param cell Original cell
  * @param cellMap Map where search neighboring cells
- * @returns {Cell} lower altitude neighboring cell
+ * @returns {Cell} Lower altitude neighboring cell
  */
 function findLowerNeighboringCell(cell, cellMap){
 
@@ -191,4 +195,19 @@ function findLowerNeighboringCell(cell, cellMap){
     }
     return res;
 
+}
+
+/**
+ * Ubdate array to be able to use contains function
+ * @param obj
+ * @returns {boolean}
+ */
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) {
+            return true;
+        }
+    }
+    return false;
 }
