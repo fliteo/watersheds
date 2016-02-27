@@ -2,6 +2,7 @@
 
 var Cell = require('../models/cell.js');
 var DrainageBasin = require('../models/drainage-basin.js');
+var utils = require('./utils.js');
 
 var DrainageBasinMapService = function (){
 
@@ -131,7 +132,7 @@ DrainageBasinMapService.prototype.calculateDrainageBasin = function(cellMap){
         for (let j = 0; j < cellMap[i].length; j++) {
 
             let c = cellMap[i][j];
-            if(!basins.contains(c.basin)){
+            if(!utils.contains(c.basin, basins)){
                 c.basin.setName(String.fromCharCode(charIndex++));
                 basins.push(c.basin);
             }

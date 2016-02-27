@@ -1,7 +1,5 @@
 "use strict";
 
-require('./adds/framework-adds.js');
-
 var Cell = require('./models/cell.js');
 var DrainageBasin = require('./models/drainage-basin.js');
 var DrainageBasinMapService = require('./services/drainage-bassin-map-service.js');

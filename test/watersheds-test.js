@@ -82,7 +82,7 @@ describe('Test on the case examples from https://code.google.com/codejam/contest
         expect(test).to.eql(res);
     });
 
-    it('Case 6', function(){
+    it('Case 5', function(){
 
         let map = [
             [8,8,8,8,8,8,8,8,8,8,8,8,8],
